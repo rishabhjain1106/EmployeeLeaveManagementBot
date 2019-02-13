@@ -1,0 +1,463 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "Image",
+            "horizontalAlignment": "center",
+            "url": "https://www.allgeier.com/en/wp-content/uploads/sites/2/2015/02/nagarro_logo.png",
+            "size": "large"
+        },
+        {
+            "type": "TextBlock",
+            "horizontalAlignment": "Center",
+            "size": "Medium",
+            "weight": "Bolder",
+            "color": "Dark",
+            "text": "Holiday Calender 2019"
+        },
+        {
+            "type": "ColumnSet",
+            "separator": true,
+            "columns": [
+                {
+                    "type": "Column",
+                    "horizontalAlignment": "Left",
+                    "spacing": "Small",
+                    "separator": true,
+                    "style": "emphasis",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "horizontalAlignment": "Center",
+                            "size": "Large",
+                            "weight": "Bolder",
+                            "color": "Attention",
+                            "text": "Day",
+                            "isSubtle": true
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Tuesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Monday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Tuesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Saturday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Sunday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Monday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Thursday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Saturday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Sunday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Friday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Friday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Wednesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Monday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Thursday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Saturday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Monday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Wednesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Wednesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Tuesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Sunday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Monday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Tuesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Tuesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Wednesday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "TBD"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "TBD"
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "horizontalAlignment": "Left",
+                    "separator": true,
+                    "style": "emphasis",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "horizontalAlignment": "Center",
+                            "size": "Large",
+                            "weight": "Bolder",
+                            "color": "Attention",
+                            "text": "Date"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "1-Jan"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "14-Jain"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "15-Jan"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "26-Jan"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "10-Feb"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "4-Mar"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "21-Mar"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "13-Apr"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "14-Apr"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "19-Apr"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "24-May"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "5-Jun"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "12-Aug"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "15-Aug"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "24-Aug"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "2-Sep"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "11-Sep"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "2-Oct"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "8-Oct"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "27-Oct"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "28-Oct"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "29-oct"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "12-Nov"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "25-Dec"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "TBD"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "TBD"
+                        }
+                    ],
+                    "width": "auto"
+                },
+                {
+                    "type": "Column",
+                    "horizontalAlignment": "Center",
+                    "style": "emphasis",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "horizontalAlignment": "Center",
+                            "size": "Large",
+                            "weight": "Bolder",
+                            "color": "Attention",
+                            "text": "Holiday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "New Year's Day"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Makar Sakranti"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Pongal"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Republic Day"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Vasant Panchami"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Maha Shivratri"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Holi"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Ram Navami"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Vaisakhi"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Good Friday"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Nagarro's Day of Reason"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Idul Fitr"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Idul Juha"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Independence day and Raksha Bandhan"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Janmashtami"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Ganesh Chaturthi"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Onam"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Gandhi Jayanti"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Dusshera"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Accent",
+                            "text": "Diwali"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Diwali"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Bhai Dooj"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "id": "flexible",
+                            "text": "Guru Nanak Jayanti"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "color": "Good",
+                            "text": "Christmas"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Haryana Election Day"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "General Election Day"
+                        }
+                    ],
+                    "width": "stretch"
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}

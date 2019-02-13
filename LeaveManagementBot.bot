@@ -1,0 +1,62 @@
+{
+    "name": "LeaveManagementBot",
+    "services": [
+		{
+            "type": "abs",
+            "tenantId": "a45fe71a-f480-4e42-ad5e-aff33165aa35",
+            "subscriptionId": "b769f6eb-f021-4e3e-8fc9-b55760298cca",
+            "resourceGroup": "Workshop",
+            "serviceName": "EmployeeLeaveManagement",
+            "name": "EmployeeLeaveManagement",
+            "id": "1",
+            "appId": "8172cc86-aa63-4a0f-b46c-6cfba5e5e408"
+        },
+        {
+            "type": "blob",
+            "connectionString": "DefaultEndpointsProtocol=https;AccountName=employeeleavemanagement8;AccountKey=8WTNvK1pZtXBPHAPJQoxzKHgKu/UjKlwrPfiocR2pfPrww4YjCXAwqD6L87DYbJJYHfqZi0og1oYkk74vb7xtw==;",
+            "tenantId": "a45fe71a-f480-4e42-ad5e-aff33165aa35",
+            "subscriptionId": "b769f6eb-f021-4e3e-8fc9-b55760298cca",
+            "resourceGroup": "Workshop",
+            "serviceName": "employeeleavemanagement8",
+            "id": "2"
+        },
+        {
+            "type": "endpoint",
+            "appId": "",
+            "appPassword": "",
+            "endpoint": "http://localhost:3978/api/messages",
+            "name": "development",
+            "id": "3"
+        },
+        {
+            "type": "endpoint",
+            "appId": "8172cc86-aa63-4a0f-b46c-6cfba5e5e408",
+            "appPassword": "zyv7pm?jF0g?DeO0v(ddO^P&Mf6v{",
+            "endpoint": "https://employeeleavemanagement.azurewebsites.net/api/messages",
+            "name": "production",
+            "id": "4"
+        },
+        {
+            "type": "appInsights",
+            "instrumentationKey": "e4689a2b-d7f2-48b3-9fee-1863853b553d",
+            "applicationId": "144326ef-3462-4d9c-96e4-c0e428fc2ca9",
+            "apiKeys": {},
+            "tenantId": "a45fe71a-f480-4e42-ad5e-aff33165aa35",
+            "subscriptionId": "b769f6eb-f021-4e3e-8fc9-b55760298cca",
+            "resourceGroup": "Workshop",
+            "serviceName": "EmployeeLeaveManagementwbvjy2",
+            "id": "5"
+        },
+        {
+            "type": "luis",
+            "appId": "e003f7f7-af77-432b-be94-9aa45f99aa6a",
+            "authoringKey": "cdf21b6e562c40bb8044a1732df369a4",
+            "version": "0.1",
+            "region": "westus",
+            "name": "BasicBotLuisApplication",
+            "id": "6"
+        }
+    ],
+    "padlock": "",
+    "version": "2.0"
+}
