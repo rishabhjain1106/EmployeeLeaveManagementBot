@@ -30,8 +30,7 @@ const checkIfDateIsFlexible=function(date){
     if(date.constructor === Date){
        date=getDateString(date);
     }
-    
-    return FlexibleHolidayList.find(FlexibleHoliday => FlexibleHoliday.value === date) === undefined;
+    return FlexibleHolidayList.find(FlexibleHoliday => FlexibleHoliday.value === date) !== undefined;
 }
 const getDateString=function(date){
     return date =date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
@@ -180,6 +179,9 @@ class LeaveManagementBot {
                         else {
                             await turnContext.sendActivity(`You already have avail this flexible holiday`);
                         }
+                    }
+                    else {
+                        await turnContext.sendActivity('Selected one is not flexible');
                     }
                 } else{
                     switch(topIntent.intent){

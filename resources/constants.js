@@ -35,60 +35,60 @@ const FlexibleHolidayList = [{
     value: '2019-01-14'
 },
 {
-    type: ActionTypes.MessageBack,
+    type: ActionTypes.PostBack,
     title: 'Tuesday 15-Jan Pongal',
     value: '2019-01-15'
 },
                                                 {
-   type: ActionTypes.ImBack,
+   type: ActionTypes.PostBack,
     title: 'Monday 04-Mar Maha Shivratari',
     value: '2019-03-04'
 },
 {
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Friday 19-Apr Good Friday',
     value: '2019-04-19'
 },
                                                 {
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Friday 24-May Nagarro\'s Day of Reason',
     value: '2019-05-24'
 },
 {
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Wednesday 05-Jun Id Ul Fitr',
     value: '2019-06-05'
 },
                                                 {
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Monday 12-Aug Id Ul Juha',
     value: '2019-08-12'
 },
 {
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Monday 02-Sep Ganesh Chaturthi',
     value: '2019-09-02'
 },{
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Wednesday 11-Sep Onam',
     value: '2019-09-11'
 },
 {
-    type: ActionTypes.ImBack,
+    type: ActionTypes.PostBack,
     title: 'Tuesday 29-Oct Bhai Dooj',
     value: '2019-09-29'
 },
 {
-    type: "ActionTypes.ImBack",
+    type: ActionTypes.PostBack,
     title: "Tuesday 12-Nov Guru Nanak Jayanti",
     value: "2019-11-12"
 },
 {
-    type: "ActionTypes.ImBack",
+    type:  ActionTypes.PostBack,
     title: "TBD Haryana Election Day",
     value: "TBD"
 },
-    {type: "ActionTypes.ImBack",
+    {type:  ActionTypes.PostBack,
     title: "TBD General Election Day",
     value: "TBD"
 }
