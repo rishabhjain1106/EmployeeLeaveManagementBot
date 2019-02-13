@@ -31,7 +31,7 @@
         {
             "type": "endpoint",
             "appId": "8172cc86-aa63-4a0f-b46c-6cfba5e5e408",
-            "appPassword": "zyv7pm?jF0g?DeO0v(ddO^P&Mf6v{",
+            "appPassword": "rxiuRKWO8164^$#(bsdAYY6",
             "endpoint": "https://employeeleavemanagement.azurewebsites.net/api/messages",
             "name": "production",
             "id": "4"
