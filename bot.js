@@ -33,7 +33,17 @@ const checkIfDateIsFlexible=function(date){
     return FlexibleHolidayList.find(FlexibleHoliday => FlexibleHoliday.value === date) !== undefined;
 }
 const getDateString=function(date){
-    return date =date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
+    var month=date.getMonth() + 1;
+    var selecteddate= date.getDate();
+    if(month<10)
+    {
+        month='0'+month;
+    }
+    if(selecteddate<10){
+        selecteddate='0' + selecteddate;
+    }
+    const dateString=date.getFullYear()+'-'+month+'-'+selecteddate;
+    return dateString;
 }
 const leaveDateValidator =function(userProfile,date){
     const dateStatus={
@@ -42,8 +52,8 @@ const leaveDateValidator =function(userProfile,date){
             flexible:false,
             casual:true,
             weekend:true,
-            flexibleCountReached:userProfile.flexibleHolidayCount < 3,
-            casualCountReached:userProfile.casualLeavesCount < 27,
+            flexibleCountReached:userProfile.flexibleHolidayCount >= 3,
+            casualCountReached:userProfile.casualLeavesCount >= 27,
             thisDateAlreadyAvailed:false
         }
     }
@@ -54,10 +64,10 @@ const leaveDateValidator =function(userProfile,date){
         dateStatus.leaveType.flexible=checkIfDateIsFlexible(date);
         dateStatus.leaveType.weekend=false;
         if(dateStatus.leaveType.flexible){
-            dateStatus.leaveType.thisDateAlreadyAvailed=userProfile.takenFlexibleHolidays.filter(takenFlexibleHoliday => takenFlexibleHoliday.value === getDateString(date)).length <= 0;
+            dateStatus.leaveType.thisDateAlreadyAvailed=userProfile.takenFlexibleHolidays.filter(takenFlexibleHoliday => takenFlexibleHoliday.value === getDateString(date)).length > 0;
             dateStatus.isValid = !dateStatus.leaveType.flexibleCountReached && !dateStatus.leaveType.thisDateAlreadyAvailed;
         } else {
-            dateStatus.leaveType.thisDateAlreadyAvailed=userProfile.takenCasualLeaves.filter(takenCasualLeave => takenCasualLeave.value === getDateString(date)).length <= 0;
+            dateStatus.leaveType.thisDateAlreadyAvailed=userProfile.takenCasualLeaves.filter(takenCasualLeave => takenCasualLeave.value === getDateString(date)).length > 0;
             dateStatus.isValid = !dateStatus.leaveType.casualCountReached && !dateStatus.leaveType.thisDateAlreadyAvailed;
         }
         
@@ -203,7 +213,8 @@ class LeaveManagementBot {
                             break;
                         case 'SubmittedRequestIntent':
                             if(results.luisResult.entities){
-                                if(results.luisResult.entities.find(e=> e.entity.toLowerCase() === 'flexibles')){
+                                console.log( results.luisResult.entities.find(e => e.entity.startsWith('flexibles')));
+                                if( results.luisResult.entities.find(e => e.entity.startsWith('flexibles')) !== undefined ){
                                     SampleHeroCardSchema.body[0].text = 'Your taken Flexible Holidays 2019';
                                     SampleHeroCardSchema.body[1].columns[0].items = [];
                                     userProfile.takenFlexibleHolidays.forEach(takenFlexibleHoliday => {
@@ -220,7 +231,7 @@ class LeaveManagementBot {
                                         attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
                                     });
                                 }
-                            }else if (results.luisResult.entities.find(e=> e.entity.toLowerCase() !== 'flexibles')){
+                            else if (results.luisResult.entities.find(e => e.entity.startsWith('flexibles')) === undefined ){
                                 SampleHeroCardSchema.body[0].text = 'Your taken Casual Leaves 2019';
                                 SampleHeroCardSchema.body[1].columns[0].items = [];
                                 userProfile.takenCasualLeaves.forEach(takenCasualLeave => {
@@ -261,6 +272,7 @@ class LeaveManagementBot {
                                     attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
                                 });
                             }
+                        }
                         break;
                         case 'LeaveRequestIntent':
                             
