@@ -28,10 +28,13 @@ const getDates = function(startDate, endDate) {
   };
 const checkIfDateIsFlexible=function(date){
     if(date.constructor === Date){
-       date =date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
+       date=getDateString(date);
     }
     
-    return FlexibleHolidayList.find(FlexibleHoliday => FlexibleHoliday.value === dateString) === undefined;
+    return FlexibleHolidayList.find(FlexibleHoliday => FlexibleHoliday.value === date) === undefined;
+}
+const getDateString=function(date){
+    return date =date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
 }
 const leaveDateValidator =function(userProfile,date){
     const dateStatus={
@@ -39,16 +42,26 @@ const leaveDateValidator =function(userProfile,date){
         leaveType:{
             flexible:false,
             casual:true,
-            weekend:false
+            weekend:true,
+            flexibleCountReached:userProfile.flexibleHolidayCount < 3,
+            casualCountReached:userProfile.casualLeavesCount < 27,
+            thisDateAlreadyAvailed:false
         }
     }
     if(date.constructor !== Date){
         date=new Date(date);
     }
     if(date.getDay() !== 0 && date.getDay() !== 6){
-        dateStatus.isValid=true;
         dateStatus.leaveType.flexible=checkIfDateIsFlexible(date);
-        dateStatus.leaveType.casual=false;
+        dateStatus.leaveType.weekend=false;
+        if(dateStatus.leaveType.flexible){
+            dateStatus.leaveType.thisDateAlreadyAvailed=userProfile.takenFlexibleHolidays.filter(takenFlexibleHoliday => takenFlexibleHoliday.value === getDateString(date)).length <= 0;
+            dateStatus.isValid = !dateStatus.leaveType.flexibleCountReached && !dateStatus.leaveType.thisDateAlreadyAvailed;
+        } else {
+            dateStatus.leaveType.thisDateAlreadyAvailed=userProfile.takenCasualLeaves.filter(takenCasualLeave => takenCasualLeave.value === getDateString(date)).length <= 0;
+            dateStatus.isValid = !dateStatus.leaveType.casualCountReached && !dateStatus.leaveType.thisDateAlreadyAvailed;
+        }
+        
     }
     return dateStatus;
 }
@@ -152,212 +165,191 @@ class LeaveManagementBot {
             const dc = await this.dialogSet.createContext(turnContext);
             const isPostBack = turnContext.activity.channelData.postback;
             if(!dc.activeDialog){
-                // if(isPostBack){
-                //     if (checkIfDateIsFlexible(turnContext.activity.text)) {
-                //         if (userProfile.flexibleHolidayCount < 3 && (userProfile.takenFlexibleHolidays.filter(takenFlexibleHoliday => takenFlexibleHoliday.value === turnContext.activity.text).length <= 0)) {
-                //             userProfile.flexibleHolidayCount++;
-                //             userProfile.takenFlexibleHolidays.push(turnContext.activity.text);
-                //             await this.userProfile.set(turnContext, userProfile);
-                //             await this.userState.saveChanges(turnContext);
-                //             await turnContext.sendActivity(`Your Flexible holiday has been updated`);
-                //         }
-                //         else if (userProfile.flexibleHolidayCount >= 3) {
-                //             await turnContext.sendActivity(`You already have avail all the flexible holidays`);
-                //         }
-                //         else {
-                //             await turnContext.sendActivity(`You already have avail this flexible holiday`);
-                //         }
-                //     }
-                // } else{
-                //     switch(topIntent.intent){
-                //         case 'PublicHoldiayIntent':
-                //             await turnContext.sendActivity({
-                //                 text: 'Nagarro Leave Management',
-                //                 attachments: [CardFactory.adaptiveCard(holidayCard)]
-                //             });
-                //             break;
-                //         case 'FlexibleHolidayIntent':
-                //             await turnContext.sendActivity({
-                //                 text: 'Nagarro Leave Management',
-                //                 attachments: [CardFactory.heroCard(
-                //                     'Flexible Holidays List',
-                //                     undefined,
-                //                     FlexibleHolidayList
-                //                 )]
-                //             });
-                //             break;
-                //         case 'SubmittedRequestIntent':
-                //             if(results.luisResult.entities){
-                //                 if(results.luisResult.entities.find(e=> e.entity.toLowerCase() === 'flexibles')){
-                //                     SampleHeroCardSchema.body[0].text = 'Your taken Flexible Holidays 2019';
-                //                     SampleHeroCardSchema.body[1].columns[0].items = [];
-                //                     userProfile.takenFlexibleHolidays.forEach(takenFlexibleHoliday => {
-                //                     SampleHeroCardSchema.body[1].columns[0].items.push(
-                //                             {
-                //                                 "type": "TextBlock",
-                //                                 "text": takenFlexibleHoliday.title
-                //                             }
-                //                         )   
-                //                     });
+                if(isPostBack){
+                    if (checkIfDateIsFlexible(turnContext.activity.text)) {
+                        if (userProfile.flexibleHolidayCount < 3 && (userProfile.takenFlexibleHolidays.filter(takenFlexibleHoliday => takenFlexibleHoliday.value === turnContext.activity.text).length <= 0)) {
+                            userProfile.flexibleHolidayCount++;
+                            userProfile.takenFlexibleHolidays.push(turnContext.activity.text);
+                            await this.userProfile.set(turnContext, userProfile);
+                            await this.userState.saveChanges(turnContext);
+                            await turnContext.sendActivity(`Your Flexible holiday has been updated`);
+                        }
+                        else if (userProfile.flexibleHolidayCount >= 3) {
+                            await turnContext.sendActivity(`You already have avail all the flexible holidays`);
+                        }
+                        else {
+                            await turnContext.sendActivity(`You already have avail this flexible holiday`);
+                        }
+                    }
+                } else{
+                    switch(topIntent.intent){
+                        case 'PublicHoldiayIntent':
+                            await turnContext.sendActivity({
+                                text: 'Nagarro Leave Management',
+                                attachments: [CardFactory.adaptiveCard(holidayCard)]
+                            });
+                            break;
+                        case 'FlexibleHolidayIntent':
+                            await turnContext.sendActivity({
+                                text: 'Nagarro Leave Management',
+                                attachments: [CardFactory.heroCard(
+                                    'Flexible Holidays List',
+                                    undefined,
+                                    FlexibleHolidayList
+                                )]
+                            });
+                            break;
+                        case 'SubmittedRequestIntent':
+                            if(results.luisResult.entities){
+                                if(results.luisResult.entities.find(e=> e.entity.toLowerCase() === 'flexibles')){
+                                    SampleHeroCardSchema.body[0].text = 'Your taken Flexible Holidays 2019';
+                                    SampleHeroCardSchema.body[1].columns[0].items = [];
+                                    userProfile.takenFlexibleHolidays.forEach(takenFlexibleHoliday => {
+                                    SampleHeroCardSchema.body[1].columns[0].items.push(
+                                            {
+                                                "type": "TextBlock",
+                                                "text": takenFlexibleHoliday.title
+                                            }
+                                        )   
+                                    });
 
-                //                     await turnContext.sendActivity({
-                //                         text: 'Nagarro Leave Management',
-                //                         attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
-                //                     });
-                //                 }
-                //             }else if (results.luisResult.entities.find(e=> e.entity.toLowerCase() !== 'flexibles')){
-                //                 SampleHeroCardSchema.body[0].text = 'Your taken Casual Leaves 2019';
-                //                 SampleHeroCardSchema.body[1].columns[0].items = [];
-                //                 userProfile.takenCasualLeaves.forEach(takenCasualLeave => {
-                //                 SampleHeroCardSchema.body[1].columns[0].items.push(
-                //                         {
-                //                             "type": "TextBlock",
-                //                             "text": takenCasualLeave.value
-                //                         }
-                //                     )
-                //                 });
+                                    await turnContext.sendActivity({
+                                        text: 'Nagarro Leave Management',
+                                        attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
+                                    });
+                                }
+                            }else if (results.luisResult.entities.find(e=> e.entity.toLowerCase() !== 'flexibles')){
+                                SampleHeroCardSchema.body[0].text = 'Your taken Casual Leaves 2019';
+                                SampleHeroCardSchema.body[1].columns[0].items = [];
+                                userProfile.takenCasualLeaves.forEach(takenCasualLeave => {
+                                SampleHeroCardSchema.body[1].columns[0].items.push(
+                                        {
+                                            "type": "TextBlock",
+                                            "text": takenCasualLeave.value
+                                        }
+                                    )
+                                });
 
-                //                 await turnContext.sendActivity({
-                //                     text: 'Nagarro Leave Management',
-                //                     attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
-                //                 });
-                //             } else {
-                //                 SampleHeroCardSchema.body[0].text = 'Your taken  Leaves 2019';
-                //                 SampleHeroCardSchema.body[1].columns[0].items = [];
-                //                 userProfile.takenFlexibleHolidays.forEach(takenFlexibleHoliday => {
-                //                     SampleHeroCardSchema.body[1].columns[0].items.push(
-                //                             {
-                //                                 "type": "TextBlock",
-                //                                 "text": takenFlexibleHoliday.title
-                //                             }
-                //                         )   
-                //                     });
-                //                 userProfile.takenCasualLeaves.forEach(takenCasualLeave => {
-                //                 SampleHeroCardSchema.body[1].columns[0].items.push(
-                //                         {
-                //                             "type": "TextBlock",
-                //                             "text": takenCasualLeave.value
-                //                         }
-                //                     )
-                //                 });
+                                await turnContext.sendActivity({
+                                    text: 'Nagarro Leave Management',
+                                    attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
+                                });
+                            } else {
+                                SampleHeroCardSchema.body[0].text = 'Your taken  Leaves 2019';
+                                SampleHeroCardSchema.body[1].columns[0].items = [];
+                                userProfile.takenFlexibleHolidays.forEach(takenFlexibleHoliday => {
+                                    SampleHeroCardSchema.body[1].columns[0].items.push(
+                                            {
+                                                "type": "TextBlock",
+                                                "text": takenFlexibleHoliday.title
+                                            }
+                                        )   
+                                    });
+                                userProfile.takenCasualLeaves.forEach(takenCasualLeave => {
+                                SampleHeroCardSchema.body[1].columns[0].items.push(
+                                        {
+                                            "type": "TextBlock",
+                                            "text": takenCasualLeave.value
+                                        }
+                                    )
+                                });
 
-                //                 await turnContext.sendActivity({
-                //                     text: 'Nagarro Leave Management',
-                //                     attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
-                //                 });
-                //             }
-                //         break;
-                //         case 'LeaveRequestIntent':
-                //             const isLeaveDateGiven = results.luisResult.entities[0].resolution.values[1];
-                //             if(isLeaveDateGiven){
-                //                 if(isLeaveDateGiven.value){
-                //                     if (userProfile.casualLeavesCount < 27 && (userProfile.takenCasualLeaves.filter(takenCasualLeave => takenCasualLeave.value === isLeaveDateGiven.value).length <= 0)) {
-                //                         userProfile.casualLeavesCount++;
-                //                         userProfile.takenCasualLeaves.push({ value: isLeaveDateGiven.value});
-                //                         await this.userProfile.set(turnContext, userProfile);
-                //                         await this.userState.saveChanges(turnContext);
-                //                         await turnContext.sendActivity(`Your Casual holiday has been updated`);
-                //                     }
-                //                     else if (userProfile.casualLeavesCount >= 27) {
-                //                         await turnContext.sendActivity(`You already have avail all the Casual Leaves`);
-                //                     }
-                //                     else {
-                //                         await turnContext.sendActivity(`You already have avail this Leave `);
-                //                     }
-                //                 }
-                //                 else
-                //                 {
-                //                     const dates=getDates(new Date(isLeaveDateGiven.start),new Date(isLeaveDateGiven.end));
+                                await turnContext.sendActivity({
+                                    text: 'Nagarro Leave Management',
+                                    attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
+                                });
+                            }
+                        break;
+                        case 'LeaveRequestIntent':
+                            
+                            //console.log(results.luisResult.entities[0].resolution);
+                            if(results.luisResult.entities[0]){
+                                const isLeaveDateGiven = results.luisResult.entities[0].resolution.values;
+                                if(isLeaveDateGiven.length >= 1 && isLeaveDateGiven[0].type === 'date'){
+                                    const dateStatus=leaveDateValidator(userProfile,isLeaveDateGiven[isLeaveDateGiven.length-1].value);
+                                    if(dateStatus.leaveType.weekend){
+                                        await turnContext.sendActivity(`sorry you enter the date which is weekend `);
+                                    }
+                                    else if(dateStatus.leaveType.flexible){
+                                        if(dateStatus.isValid){
+                                            userProfile.flexibleHolidayCount++;
+                                            userProfile.takenFlexibleHolidays.push(isLeaveDateGiven[isLeaveDateGiven.length-1].value);
+                                            await this.userProfile.set(turnContext, userProfile);
+                                            await this.userState.saveChanges(turnContext);
+                                            await turnContext.sendActivity(`Your Flexible holiday has been updated`);
+                                        }
+                                        else{
+                                            if(dateStatus.leaveType.flexibleCountReached){
+                                                await turnContext.sendActivity(`You already have availed all Flexible Leaves `);
+                                            }
+                                            else if (dateStatus.leaveType.thisDateAlreadyAvailed){
+                                                await turnContext.sendActivity(`You already have availed this Leave `);
+                                            }
+                                            else{
+                                                await turnContext.sendActivity(`sorry can't process `);
+                                            }
+                                        }
+                                    }
+                                    else if(dateStatus.leaveType.casual){
+                                        if(dateStatus.isValid){
+                                            userProfile.casualLeavesCount++;
+                                            userProfile.takenCasualLeaves.push({ value: isLeaveDateGiven[isLeaveDateGiven.length-1].value});
+                                            await this.userProfile.set(turnContext, userProfile);
+                                            await this.userState.saveChanges(turnContext);
+                                            await turnContext.sendActivity(`Your Casual holiday has been updated`);
+                                        }
+                                        else{
+                                            if(dateStatus.leaveType.casualCountReached){
+                                                await turnContext.sendActivity(`You already have availed all Casual Leaves `);
+                                            }
+                                            else if (dateStatus.leaveType.thisDateAlreadyAvailed){
+                                                await turnContext.sendActivity(`You already have availed this Leave `);
+                                            }
+                                            else{
+                                                await turnContext.sendActivity(`sorry can't process `);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        await turnContext.sendActivity(`sorry can't process `);
+                                    }
+                                }
+                                else
+                                {
+                                    const dates=getDates(new Date(isLeaveDateGiven[isLeaveDateGiven.length-1].start),new Date(isLeaveDateGiven[isLeaveDateGiven.length-1].end));
+                                    dates.forEach(date =>{
+                                        date=getDateString(date);
+                                        const dateStatus=leaveDateValidator(userProfile,date);
+                                        if(dateStatus.leaveType.flexible){
+                                            if(dateStatus.isValid){
+                                                userProfile.flexibleHolidayCount++;
+                                                userProfile.takenFlexibleHolidays.push(date);
+                                            }
+                                        }
+                                        else if(dateStatus.leaveType.casual){
+                                            if(dateStatus.isValid){
+                                                userProfile.casualLeavesCount++;
+                                                userProfile.takenCasualLeaves.push({ value: date});
+                                            }
+                                        }
+                                    });
+                                    await this.userProfile.set(turnContext, userProfile);
+                                    await this.userState.saveChanges(turnContext);
+                                    await turnContext.sendActivity(`Your  holidays has been updated`);
                                     
-                //                 }
-                //             }
-                //         break;
-                //         case 'GreetingIntent': 
-                //         case 'None':
-                //         default: 
-                //             await new WelcomeUserBot().onTurn(turnContext);
-                //         break;
-                //     }
-                // }
-                
-                if (turnContext.activity.text === 'List all Holidays') {
-                    await turnContext.sendActivity({
-                        text: 'Nagarro Leave Management',
-                        attachments: [CardFactory.adaptiveCard(holidayCard)]
-                    });
-                } else if (turnContext.activity.text === 'List all Flexible Holidays') {
-                    await turnContext.sendActivity({
-                        text: 'Nagarro Leave Management',
-                        attachments: [CardFactory.heroCard(
-                            'Flexible Holidays List',
-                            undefined,
-                            FlexibleHolidayList
-                        )]
-                    });
-                } else if (FlexibleHolidayList.filter(FlexibleHoliday => FlexibleHoliday.value === turnContext.activity.text).length >= 1) {
-                    if (userProfile.flexibleHolidayCount < 3 && (userProfile.takenFlexibleHolidays.filter(takenFlexibleHoliday => takenFlexibleHoliday.value === turnContext.activity.text).length <= 0)) {
-                        userProfile.flexibleHolidayCount++;
-                        userProfile.takenFlexibleHolidays.push(FlexibleHolidayList.find(FlexibleHoliday => FlexibleHoliday.value === turnContext.activity.text));
-                        await this.userProfile.set(turnContext, userProfile);
-                        await this.userState.saveChanges(turnContext);
-                        await turnContext.sendActivity(`Your Flexible holiday has been updated`);
-                    }
-                    else if (userProfile.flexibleHolidayCount >= 3) {
-                        await turnContext.sendActivity(`You already have avail all the flexible holidays`);
-                    }
-                    else {
-                        await turnContext.sendActivity(`You already have avail this flexible holiday`);
-                    }
-                } else if (turnContext.activity.text.startsWith('I want to take a leave')) {
-                    if (userProfile.casualLeavesCount < 27 && (userProfile.takenCasualLeaves.filter(takenCasualLeave => takenCasualLeave.value === turnContext.activity.text.split('I want to take a leave')[1].trim()).length <= 0)) {
-                        userProfile.casualLeavesCount++;
-                        userProfile.takenCasualLeaves.push({ value: turnContext.activity.text.split('I want to take a leave')[1].trim() });
-                        await this.userProfile.set(turnContext, userProfile);
-                        await this.userState.saveChanges(turnContext);
-                        await turnContext.sendActivity(`Your Casual holiday has been updated`);
-                    }
-                    else if (userProfile.casualLeavesCount >= 27) {
-                        await turnContext.sendActivity(`You already have avail all the Casual Leaves`);
-                    }
-                    else {
-                        await turnContext.sendActivity(`You already have avail this Leave `);
-                    }
-                } else if (turnContext.activity.text === 'Show taken Flexible Holidays') {
-                    SampleHeroCardSchema.body[0].text = 'Your taken Flexible Holidays 2019';
-                    SampleHeroCardSchema.body[1].columns[0].items = [];
-                    userProfile.takenFlexibleHolidays.forEach(takenFlexibleHoliday => {
-                        SampleHeroCardSchema.body[1].columns[0].items.push(
-                            {
-                                "type": "TextBlock",
-                                "text": takenFlexibleHoliday.title
+                                }
                             }
-                        )
-                    });
-
-                    await turnContext.sendActivity({
-                        text: 'Nagarro Leave Management',
-                        attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
-                    });
-                } else if (turnContext.activity.text === 'Show taken Casual Leaves') {
-                    SampleHeroCardSchema.body[0].text = 'Your taken Casual Leaves 2019';
-                    SampleHeroCardSchema.body[1].columns[0].items = [];
-                    userProfile.takenCasualLeaves.forEach(takenCasualLeave => {
-                        SampleHeroCardSchema.body[1].columns[0].items.push(
-                            {
-                                "type": "TextBlock",
-                                "text": takenCasualLeave.value
+                            else{
+                                await dc.beginDialog(CASUAL_LEAVE_DIALOG);
                             }
-                        )
-                    });
-
-                    await turnContext.sendActivity({
-                        text: 'Nagarro Leave Management',
-                        attachments: [CardFactory.adaptiveCard(SampleHeroCardSchema)]
-                    });
-                } else if (turnContext.activity.text === 'specific leave'){
-                    await dc.beginDialog(CASUAL_LEAVE_DIALOG);
-                } else {
-                    await turnContext.sendActivity(`You said '${turnContext.activity.text}'`);
+                        break;
+                        case 'GreetingIntent': 
+                        case 'None':
+                        default: 
+                            await new WelcomeUserBot().onTurn(turnContext);
+                        break;
+                    }
                 }
             } else {
                 const dialogTurnResult = await dc.continueDialog();
