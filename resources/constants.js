@@ -82,15 +82,6 @@ const FlexibleHolidayList = [{
     type: ActionTypes.PostBack,
     title: "Tuesday 12-Nov Guru Nanak Jayanti",
     value: "2019-11-12"
-},
-{
-    type:  ActionTypes.PostBack,
-    title: "TBD Haryana Election Day",
-    value: "TBD"
-},
-    {type:  ActionTypes.PostBack,
-    title: "TBD General Election Day",
-    value: "TBD"
 }
 ];
 
