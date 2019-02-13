@@ -49,12 +49,13 @@
         },
         {
             "type": "luis",
-            "appId": "e003f7f7-af77-432b-be94-9aa45f99aa6a",
-            "authoringKey": "cdf21b6e562c40bb8044a1732df369a4",
-            "version": "0.1",
-            "region": "westus",
-            "name": "BasicBotLuisApplication",
-            "id": "6"
+            "name": "LeaveManagement",
+			"appId": "04dbee15-e9cd-4e79-a659-dc801a470664",
+			"version": "0.1",
+			"authoringKey": "cdf21b6e562c40bb8044a1732df369a4",
+			"subscriptionKey": "cdf21b6e562c40bb8044a1732df369a4",
+			"region": "westus",
+			"id": "158"
         }
     ],
     "padlock": "",
